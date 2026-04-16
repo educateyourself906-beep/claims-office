@@ -3,55 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Airport Claims Office | Class 222A</title>
+    <title>Class 222A | Digital Claims Office</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
-        body { font-family: 'JetBrains Mono', monospace; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; letter-spacing: 0.01em; }
+        
+        /* Keep the cool look, but make it easier to read */
+        .crt-bg {
+            background: linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
+        }
         .crt-overlay {
             pointer-events: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.05));
-            background-size: 100% 4px, 3px 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
+            background-size: 100% 4px;
             z-index: 100;
         }
-        .loading-dots:after {
-            content: '.';
-            animation: dots 1.5s steps(5, end) infinite;
-        }
-        @keyframes dots { 0%, 20% { content: '.'; } 40% { content: '..'; } 60% { content: '...'; } 80%, 100% { content: ''; } }
         select option { background-color: #000; color: #4ade80; }
+        .glow-text { text-shadow: 0 0 8px rgba(74, 222, 128, 0.5); }
     </style>
 </head>
-<body class="bg-slate-900 text-green-400 min-h-screen p-4 md:p-10">
+<body class="crt-bg text-green-400 min-h-screen p-4 md:p-10">
     <div class="crt-overlay"></div>
 
-    <div class="max-w-4xl mx-auto border-2 border-green-800 p-6 md:p-8 bg-black shadow-[0_0_30px_rgba(22,101,52,0.3)] relative">
-        <!-- HEADER -->
-        <header class="border-b-2 border-green-800 pb-4 mb-8 flex justify-between items-center">
+    <div class="max-w-4xl mx-auto border-2 border-green-900 p-6 md:p-8 bg-black shadow-2xl relative">
+        
+        <!-- HEADER: SIMPLIFIED -->
+        <header class="border-b-2 border-green-900 pb-6 mb-8 flex justify-between items-center">
             <div>
-                <h1 class="text-3xl font-black uppercase tracking-tighter">Airport Claims Office</h1>
-                <p class="text-xs text-green-700">System Log: Friday April 17, 2026 | Digital Lab 222A</p>
+                <h1 class="text-3xl font-black uppercase tracking-tight glow-text">Airport Lost & Found</h1>
+                <p class="text-xs text-green-700 font-bold uppercase tracking-widest mt-1">Computer Lab Activity | April 17</p>
             </div>
-            <div class="text-right">
-                <i class="fas fa-id-card-clip text-4xl text-green-700"></i>
+            <div class="hidden md:block text-right">
+                <i class="fas fa-search-location text-4xl text-green-800"></i>
             </div>
         </header>
 
-        <!-- SETUP SCREEN -->
-        <div id="setup-screen" class="space-y-6">
-            <div class="bg-green-950/20 p-8 border border-green-800 rounded-lg">
-                <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                    <i class="fas fa-user-check"></i> PERSONNEL IDENTIFICATION
+        <!-- STEP 1: LOGIN (SIMPLE WORDS) -->
+        <div id="setup-screen" class="space-y-8 py-4">
+            <div class="bg-green-950/20 p-8 border border-green-900 rounded-xl">
+                <h2 class="text-xl font-bold mb-6 flex items-center gap-3">
+                    <span class="bg-green-900 text-black w-8 h-8 rounded-full flex items-center justify-center text-sm">1</span>
+                    START YOUR REPORT
                 </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <label class="block text-[10px] uppercase font-bold text-green-700 mb-2">Select Your Name</label>
-                        <select id="student-name" class="w-full bg-black border border-green-800 p-3 text-green-400 outline-none focus:border-green-400 appearance-none cursor-pointer">
-                            <option value="">-- SELECT FROM ROSTER --</option>
+                        <label class="block text-xs font-black text-green-700 mb-2 uppercase">Your Name</label>
+                        <select id="student-name" class="w-full bg-black border-2 border-green-900 p-4 text-green-400 outline-none focus:border-green-400 appearance-none cursor-pointer rounded-lg text-lg">
+                            <option value="">-- Click to find your name --</option>
                             <option value="B., Adeline">B., Adeline</option>
                             <option value="B., Rose">B., Rose</option>
                             <option value="C., Vivian">C., Vivian</option>
@@ -71,101 +74,108 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[10px] uppercase font-bold text-green-700 mb-2">Assignment Level</label>
-                        <select id="student-level" class="w-full bg-black border border-green-800 p-3 text-green-400 outline-none focus:border-green-400 cursor-pointer">
-                            <option value="basic">Level 1/2: Literacy & Beginning</option>
-                            <option value="intermediate">Level 3: Intermediate</option>
-                            <option value="advanced">Level 4/5: High Intermediate & Advanced</option>
+                        <label class="block text-xs font-black text-green-700 mb-2 uppercase">Your Level</label>
+                        <select id="student-level" class="w-full bg-black border-2 border-green-900 p-4 text-green-400 outline-none focus:border-green-400 cursor-pointer rounded-lg text-lg">
+                            <option value="basic">Level 1 or 2</option>
+                            <option value="intermediate">Level 3</option>
+                            <option value="advanced">Level 4 or 5</option>
                         </select>
                     </div>
                 </div>
-                <button onclick="startClaim()" class="mt-8 bg-green-600 text-black px-8 py-4 font-bold hover:bg-green-400 transition-all w-full flex items-center justify-center gap-2">
-                    <i class="fas fa-folder-open"></i> OPEN SECURE CLAIM PORTAL
+                
+                <button onclick="startClaim()" class="mt-10 bg-green-500 text-black px-8 py-5 font-black hover:bg-green-300 transition-all w-full flex items-center justify-center gap-3 text-xl rounded-lg shadow-lg">
+                    GO TO MY REPORT <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
-            
-            <div class="text-[10px] text-green-800 italic text-center">
-                System authorized for Class 222A. Unauthorized access is prohibited.
-            </div>
+            <p class="text-center text-xs text-green-900">Please see the teacher if you cannot find your name.</p>
         </div>
 
-        <!-- CLAIM FORM SCREEN -->
-        <div id="claim-screen" class="hidden space-y-8 animate-in fade-in duration-700">
-            <div class="flex justify-between items-end border-b border-green-900 pb-2">
-                <span class="text-xs font-bold">ACTIVE FILE: <span id="user-display" class="text-green-400"></span></span>
-                <span class="text-[10px] text-green-700" id="level-display"></span>
+        <!-- STEP 2: WRITING FORM (CLEAR LABELS) -->
+        <div id="claim-screen" class="hidden space-y-8 animate-in fade-in duration-500">
+            <div class="flex items-center justify-between bg-green-950/40 p-3 rounded border border-green-900">
+                <span class="text-sm font-bold">WRITING AS: <span id="user-display" class="text-white ml-2"></span></span>
+                <span class="text-[10px] bg-green-900 text-black px-2 py-1 rounded font-black" id="level-display"></span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- FORM -->
-                <div class="md:col-span-2 space-y-6">
+                <!-- MAIN FORM -->
+                <div class="md:col-span-2 space-y-8">
                     <div>
-                        <label class="block text-[10px] font-bold mb-2 tracking-widest text-green-600">I. EVIDENCE DESCRIPTION (ADJECTIVES)</label>
-                        <textarea id="item-desc" rows="5" placeholder="Describe the item: What kind? How many? Which one?" class="w-full bg-black border border-green-800 p-4 text-green-400 outline-none focus:border-green-400 placeholder:text-green-900"></textarea>
+                        <label class="block text-sm font-bold mb-3 text-green-500">
+                            1. Describe the missing item
+                        </label>
+                        <p class="text-xs text-green-800 mb-2 italic">Tell the computer: What color? What material? How many?</p>
+                        <textarea id="item-desc" rows="5" placeholder="Example: I lost a large, red, leather bag. It has two silver zippers..." class="w-full bg-black border-2 border-green-900 p-4 text-green-400 outline-none focus:border-green-400 placeholder:text-green-900 rounded-lg text-lg"></textarea>
                     </div>
 
-                    <div id="advanced-fields" class="hidden space-y-6 border-t border-green-900 pt-6">
+                    <!-- ADVANCED/INTERMEDIATE ONLY -->
+                    <div id="advanced-fields" class="hidden space-y-8 border-t border-green-900 pt-8">
                         <div>
-                            <label class="block text-[10px] font-bold mb-2 tracking-widest text-green-600">II. TIME CLAUSE (UNTIL / AS SOON AS)</label>
-                            <input type="text" id="time-clause" placeholder="Example: I will wait until the agent finds it..." class="w-full bg-black border border-green-800 p-4 text-green-400 outline-none focus:border-green-400">
+                            <label class="block text-sm font-bold mb-3 text-green-500">
+                                2. When will you wait? (Time Clauses)
+                            </label>
+                            <p class="text-xs text-green-800 mb-2 italic">Use 'until' or 'as soon as'.</p>
+                            <input type="text" id="time-clause" placeholder="Example: I will wait at the gate until the agent finds it." class="w-full bg-black border-2 border-green-900 p-4 text-green-400 outline-none focus:border-green-400 rounded-lg">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold mb-2 tracking-widest text-green-600">III. REPORTED SPEECH (BACKSHIFT)</label>
-                            <input type="text" id="reported-speech" placeholder="Example: The traveler said he had lost his bag..." class="w-full bg-black border border-green-800 p-4 text-green-400 outline-none focus:border-green-400">
+                            <label class="block text-sm font-bold mb-3 text-green-500">
+                                3. What did the traveler say? (Reported Speech)
+                            </label>
+                            <p class="text-xs text-green-800 mb-2 italic">Example: The traveler said she had lost her bag.</p>
+                            <input type="text" id="reported-speech" placeholder="The traveler said that..." class="w-full bg-black border-2 border-green-900 p-4 text-green-400 outline-none focus:border-green-400 rounded-lg">
                         </div>
                     </div>
 
-                    <button onclick="submitToAI()" id="submit-btn" class="w-full bg-green-700 text-black py-4 font-bold hover:bg-green-400 shadow-[0_0_15px_rgba(34,197,94,0.3)]">
-                        ENCRYPT & SUBMIT TO SECURITY AI
+                    <button onclick="submitToAI()" id="submit-btn" class="w-full bg-green-600 text-black py-5 font-black hover:bg-green-400 shadow-xl text-xl rounded-lg uppercase tracking-tight">
+                        Finish & View My Report
                     </button>
                 </div>
 
-                <!-- SIDEBAR TOOLS -->
+                <!-- SIDEBAR TOOLS (SIMPLIFIED) -->
                 <div class="space-y-6">
-                    <div class="bg-green-950/20 border border-green-900 p-4 rounded">
-                        <h3 class="text-xs font-bold border-b border-green-900 mb-3 pb-1 text-green-500">DICTIONARY MAPPING</h3>
-                        <div class="text-[10px] space-y-3">
+                    <div class="bg-green-950/20 border-2 border-green-900 p-5 rounded-xl">
+                        <h3 class="text-xs font-black border-b border-green-900 mb-4 pb-2 text-green-500 uppercase">Need Help?</h3>
+                        <div class="space-y-5">
                             <div>
-                                <p class="font-bold text-green-700 underline">MATERIALS</p>
-                                <p>Leather, Nylon, Plastic, Metallic, Canvas, Polyester.</p>
+                                <p class="text-[10px] font-black text-green-700 uppercase mb-1">Materials</p>
+                                <p class="text-xs">Leather, Nylon, Plastic, Metal, Fabric.</p>
                             </div>
                             <div>
-                                <p class="font-bold text-green-700 underline">ADJECTIVES</p>
-                                <p>Strange, Heavy, Stormy, Large, Tiny, Floral, Striped, Plaid.</p>
+                                <p class="text-[10px] font-black text-green-700 uppercase mb-1">Adjectives</p>
+                                <p class="text-xs">Strange, Heavy, Large, Tiny, Floral, Striped.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-blue-950/10 border border-blue-900/30 p-4 rounded">
-                        <h3 class="text-xs font-bold border-b border-blue-900/30 mb-3 pb-1 text-blue-500">SECURE LOG</h3>
-                        <div class="text-[10px] italic text-blue-400/50">
-                            Waiting for user input...
-                        </div>
+                    <div class="p-4 border border-green-900/30 rounded text-center">
+                        <p class="text-[10px] text-green-800 italic">Check your spelling with the Visual Dictionary!</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- RESULT SCREEN -->
-        <div id="result-screen" class="hidden mt-8 border-t-2 border-dashed border-green-900 pt-8 animate-in slide-in-from-bottom-10 duration-1000">
-            <h2 class="text-xl font-bold mb-4 flex items-center gap-3">
-                <i class="fas fa-file-shield text-green-500"></i> GENERATED SECURITY AFFIDAVIT
-            </h2>
-            <div id="ai-response" class="bg-black p-8 border-2 border-green-600 text-green-400 text-sm leading-relaxed whitespace-pre-wrap font-sans shadow-[inset_0_0_20px_rgba(34,197,94,0.1)]"></div>
-            <div class="mt-8 flex flex-col md:flex-row gap-4 no-print">
-                <button onclick="window.print()" class="bg-green-600 text-black px-10 py-3 font-bold hover:bg-green-400 flex items-center justify-center gap-2">
-                    <i class="fas fa-print"></i> PRINT FOR FOLDER
+        <!-- RESULT SCREEN (CLEANER) -->
+        <div id="result-screen" class="hidden mt-8 border-t-4 border-green-900 pt-8 animate-in slide-in-from-bottom-10 duration-700">
+            <div class="flex items-center gap-4 mb-6">
+                <i class="fas fa-file-alt text-4xl text-green-500"></i>
+                <h2 class="text-2xl font-black uppercase glow-text">Your Official Report</h2>
+            </div>
+            
+            <div id="ai-response" class="bg-black p-8 border-2 border-green-500 text-green-400 text-base leading-relaxed whitespace-pre-wrap font-sans shadow-inner rounded-xl"></div>
+            
+            <div class="mt-10 flex flex-col md:flex-row gap-4 no-print">
+                <button onclick="window.print()" class="bg-green-500 text-black px-10 py-4 font-black hover:bg-green-300 flex items-center justify-center gap-3 rounded-lg flex-1">
+                    <i class="fas fa-print"></i> PRINT FOR YOUR FOLDER
                 </button>
-                <button onclick="location.reload()" class="border border-green-800 px-10 py-3 font-bold hover:bg-green-900 text-green-800">
-                    <i class="fas fa-undo"></i> START NEW CLAIM
+                <button onclick="location.reload()" class="border-2 border-green-900 px-10 py-4 font-black hover:bg-green-950 text-green-800 rounded-lg">
+                    START AGAIN
                 </button>
             </div>
         </div>
 
         <!-- FOOTER -->
-        <footer class="mt-12 pt-4 border-t border-green-900 text-[10px] text-green-800 flex justify-between uppercase tracking-widest">
-            <span>Terminal: #222A-FRIDAY</span>
-            <span class="hidden md:block">Harris Adult Education System v4.1.7</span>
-            <span>Auth: Instructor 01</span>
+        <footer class="mt-12 pt-6 border-t border-green-950 text-[10px] text-green-900 flex justify-between uppercase font-bold tracking-widest">
+            <span>Class 222A Digital Lab</span>
+            <span>Harris Adult Education</span>
         </footer>
     </div>
 
@@ -178,18 +188,25 @@
             const level = document.getElementById('student-level').value;
             
             if(!studentName) {
-                alert("ACCESS DENIED: Please select your name from the roster.");
+                alert("Please select your name first.");
                 return;
             }
             
             document.getElementById('setup-screen').classList.add('hidden');
             document.getElementById('claim-screen').classList.remove('hidden');
             document.getElementById('user-display').innerText = studentName;
-            document.getElementById('level-display').innerText = `CLASS RANK: ${level.toUpperCase()}`;
+            
+            const levelMap = {
+                'basic': 'Level 1-2',
+                'intermediate': 'Level 3',
+                'advanced': 'Level 4-5'
+            };
+            document.getElementById('level-display').innerText = levelMap[level];
             
             if(level === 'advanced' || level === 'intermediate') {
                 document.getElementById('advanced-fields').classList.remove('hidden');
             }
+            window.scrollTo(0,0);
         }
 
         async function submitToAI() {
@@ -200,26 +217,25 @@
             const report = document.getElementById('reported-speech').value;
             const btn = document.getElementById('submit-btn');
 
-            if(!desc) { alert("ERROR: Evidence description required."); return; }
+            if(!desc) { alert("Please write a description first."); return; }
 
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-sync fa-spin"></i> ENCRYPTING DATA...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> CREATING REPORT...';
             
-            const systemPrompt = `You are a high-level Airport Security AI at a futuristic customs terminal. 
+            const systemPrompt = `You are an Airport Security Assistant. 
             The user is an ESL student at NRS Level: ${level}. 
-            Your task is to take their provided details and format them into a professional, official "Security Affidavit."
+            Task: Take their notes and make a formal "Official Report".
             
-            Rules:
-            1. Start with a header: "OFFICIAL SECURITY AFFIDAVIT - CASE #222A-${Math.floor(Math.random()*9000)+1000}"
-            2. List the reporter: "${studentName}"
-            3. Rewrite their description into a professional narrative.
-            4. Critical Feedback: 
-               - For Intermediate/Advanced: Specifically check if they used 'until' or 'as soon as' and Reported Speech. 
-               - If they missed these, add a "SECURITY RECOMMENDATION" at the bottom suggesting they check their Ventures 4 book.
-            5. Use a professional, slightly cold, but helpful tone.
-            6. Keep the layout clean with headers for "ITEM DESCRIPTION" and "TIMELINE OF INCIDENT".`;
+            Format:
+            1. Title: "OFFICIAL LOST ITEM REPORT"
+            2. Name: "${studentName}"
+            3. Detailed Description: (Rewrite their notes into professional, clear English sentences).
+            4. Timeline: (Include their until/as soon as sentence if provided).
+            
+            Feedback: If they are Level 4/5, briefly check their Reported Speech and Time Clauses. If they made a mistake, add a "Teacher Tip" at the bottom to help them learn.
+            Keep the tone professional and very clear for a student to read.`;
 
-            const userQuery = `Reporter: ${studentName}. Described Item: ${desc}. Planned Action: ${time}. Reported Statement: ${report}.`;
+            const userQuery = `Student: ${studentName}. Item Notes: ${desc}. Time Clause: ${time}. Statement: ${report}.`;
 
             let retries = 0;
             const maxRetries = 5;
@@ -242,7 +258,7 @@
                     document.getElementById('result-screen').classList.remove('hidden');
                     document.getElementById('ai-response').innerText = text;
                     btn.disabled = false;
-                    btn.innerHTML = 'SUBMIT TO SECURITY AI';
+                    btn.innerHTML = 'Finish & View My Report';
                     document.getElementById('result-screen').scrollIntoView({ behavior: 'smooth' });
 
                 } catch (error) {
@@ -252,8 +268,8 @@
                         setTimeout(callGemini, delay);
                     } else {
                         btn.disabled = false;
-                        btn.innerHTML = 'RETRY SUBMISSION';
-                        alert("COMMUNICATION ERROR: Security server timed out. Please retry.");
+                        btn.innerHTML = 'RETRY';
+                        alert("The server is busy. Please try again.");
                     }
                 }
             }
@@ -261,17 +277,17 @@
             callGemini();
         }
 
-        // Auto-select Level based on typical name placement (optional convenience)
+        // Automatic NRS Level Selection
         document.getElementById('student-name').addEventListener('change', function() {
             const val = this.value;
             const levelSelect = document.getElementById('student-level');
-            const level1_2 = ["B., Adeline", "B., Rose", "F., MacDonald", "S., Frisia", "C., Paola", "H., Maria", "K., Aminata"];
-            const level3 = ["C., Vivian", "C., Debora", "C., Domingo", "M., Estefania"];
-            const level4_5 = ["E., Marie", "J., Jeyoung", "K., Mijung", "O., Priscilla", "P., Enderson"];
+            const l1_2 = ["B., Adeline", "B., Rose", "F., MacDonald", "S., Frisia", "C., Paola", "H., Maria", "K., Aminata"];
+            const l3 = ["C., Vivian", "C., Debora", "C., Domingo", "M., Estefania"];
+            const l4_5 = ["E., Marie", "J., Jeyoung", "K., Mijung", "O., Priscilla", "P., Enderson"];
             
-            if (level1_2.includes(val)) levelSelect.value = "basic";
-            else if (level3.includes(val)) levelSelect.value = "intermediate";
-            else if (level4_5.includes(val)) levelSelect.value = "advanced";
+            if (l1_2.includes(val)) levelSelect.value = "basic";
+            else if (l3.includes(val)) levelSelect.value = "intermediate";
+            else if (l4_5.includes(val)) levelSelect.value = "advanced";
         });
     </script>
 </body>
