@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class 222A | Digital Claims Office</title>
+    <title>Class 222A | Airport Security Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -19,7 +19,7 @@
             background-size: 100% 4px; z-index: 100;
         }
 
-        /* PRINT LOGIC: This ensures a clean white page with black text */
+        /* PRINT LOGIC: Fix for blank pages and ink saving */
         @media print {
             .no-print, header, nav, #setup-screen, #main-screen, .crt-line, button, footer {
                 display: none !important;
@@ -55,13 +55,13 @@
 <body class="p-4 md:p-10 min-h-screen flex items-center justify-center">
     <div class="crt-line no-print"></div>
 
-    <div class="max-w-4xl w-full terminal-container p-6 md:p-10 bg-black rounded-2xl relative overflow-hidden">
+    <div class="max-w-5xl w-full terminal-container p-6 md:p-10 bg-black rounded-2xl relative overflow-hidden">
         
         <!-- HEADER -->
         <header class="border-b-2 border-green-900 pb-6 mb-8 flex justify-between items-center no-print">
             <div>
-                <h1 class="text-3xl font-black uppercase tracking-tighter glow">Airport Lost & Found</h1>
-                <p class="text-[10px] text-green-800 font-bold uppercase tracking-widest mt-1">Class 222A | Computer Lab | April 17</p>
+                <h1 class="text-3xl font-black uppercase tracking-tighter glow">Airport Security Portal</h1>
+                <p class="text-[10px] text-green-800 font-bold uppercase tracking-widest mt-1">New Hire Orientation | April 17, 2026</p>
             </div>
             <i class="fas fa-shield-halved text-4xl text-green-900"></i>
         </header>
@@ -97,27 +97,27 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[10px] font-black text-green-800 uppercase mb-2">Class Level</label>
-                        <select id="student-level" class="w-full bg-black border-2 border-green-900 p-4 text-green-400 rounded-lg text-lg outline-none">
-                            <option value="basic">NRS Level 1-2</option>
-                            <option value="intermediate">NRS Level 3</option>
-                            <option value="advanced">NRS Level 4-5</option>
+                        <label class="block text-[10px] font-black text-green-800 uppercase mb-2">Security Group</label>
+                        <select id="student-level" class="w-full bg-black border-2 border-green-900 p-4 text-green-400 rounded-lg text-lg outline-none cursor-not-allowed" disabled>
+                            <option value="basic">Blue Group (L1-2)</option>
+                            <option value="intermediate">Green Group (L3)</option>
+                            <option value="advanced">Orange Group (L4-5)</option>
                         </select>
                     </div>
                 </div>
                 <button onclick="startApp()" class="mt-10 bg-green-600 text-black px-8 py-5 font-black hover:bg-green-400 w-full rounded-xl text-xl uppercase transition-all shadow-lg">
-                    Log in to Terminal
+                    LOG IN TO SYSTEM
                 </button>
             </div>
         </div>
 
         <!-- MAIN ACTIVITY -->
         <div id="main-screen" class="hidden space-y-8 no-print">
-            <!-- AUDIO -->
+            <!-- AUDIO PANEL -->
             <div class="bg-blue-900/10 border-2 border-blue-900 p-6 rounded-2xl flex flex-col md:flex-row items-center gap-6">
                 <div class="flex-1 text-center md:text-left">
                     <h3 class="text-blue-400 font-bold text-lg uppercase tracking-tight">2. Audio Evidence</h3>
-                    <p class="text-xs text-blue-800 font-bold">Listen to the traveler's description.</p>
+                    <p class="text-xs text-blue-800 font-bold">Listen carefully to the traveler's description.</p>
                 </div>
                 <button onclick="playAudio()" class="bg-blue-600 text-white px-10 py-4 rounded-full font-black flex items-center gap-3 hover:bg-blue-500 transition-all shadow-xl">
                     <i class="fas fa-play"></i> Play Message
@@ -125,40 +125,67 @@
                 <audio id="audio-player"></audio>
             </div>
 
-            <!-- FORM -->
-            <div class="space-y-8">
-                <div>
-                    <label class="block text-sm font-bold mb-3 text-green-500 uppercase">3. Describe the Item</label>
-                    <textarea id="item-desc" rows="4" placeholder="Type adjectives for color, material, and size..." class="w-full bg-black border-2 border-green-900 p-4 text-green-400 rounded-xl text-lg outline-none focus:border-green-400 placeholder:text-green-900"></textarea>
+            <!-- FORM & WORD BANK -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="md:col-span-2 space-y-8">
+                    <div>
+                        <label class="block text-sm font-bold mb-3 text-green-500 uppercase tracking-widest">3. Item Description</label>
+                        <textarea id="item-desc" rows="5" placeholder="Type adjectives for color, material, and size..." class="w-full bg-black border-2 border-green-900 p-4 text-green-400 rounded-xl text-lg outline-none focus:border-green-400 placeholder:text-green-900"></textarea>
+                    </div>
+
+                    <div id="advanced-fields" class="hidden space-y-8 border-t border-green-900 pt-8">
+                        <div>
+                            <label class="block text-sm font-bold mb-2 text-green-500 uppercase">4. When? (Time Clauses)</label>
+                            <input type="text" id="time-clause" placeholder="Example: I will wait until..." class="w-full bg-black border-2 border-green-900 p-4 text-green-400 rounded-xl outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold mb-2 text-green-500 uppercase">5. Reported Statement</label>
+                            <input type="text" id="reported-speech" placeholder="The traveler said that he..." class="w-full bg-black border-2 border-green-900 p-4 text-green-400 rounded-xl outline-none">
+                        </div>
+                    </div>
+
+                    <button onclick="submitReport()" id="submit-btn" class="w-full bg-green-600 text-black py-5 font-black hover:bg-green-400 rounded-xl text-xl uppercase transition-all shadow-2xl">
+                        SUBMIT OFFICIAL REPORT
+                    </button>
                 </div>
 
-                <div id="advanced-only" class="hidden space-y-8 border-t border-green-900 pt-8">
-                    <div>
-                        <label class="block text-sm font-bold mb-2 text-green-500 uppercase">4. When? (Time Clauses)</label>
-                        <input type="text" id="time-clause" placeholder="Example: I will wait until..." class="w-full bg-black border-2 border-green-900 p-4 text-green-400 rounded-xl outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold mb-2 text-green-500 uppercase">5. Reported Speech</label>
-                        <input type="text" id="reported-speech" placeholder="The traveler said that he..." class="w-full bg-black border-2 border-green-900 p-4 text-green-400 rounded-xl outline-none">
+                <!-- SIDEBAR WORD BANK -->
+                <div class="space-y-6">
+                    <div class="bg-green-950/20 border-2 border-green-900 p-6 rounded-xl">
+                        <h3 class="text-xs font-black border-b-2 border-green-900 mb-4 pb-2 text-green-500 uppercase tracking-widest">Digital Word Bank</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <p class="text-[10px] font-black text-green-800 uppercase mb-2 tracking-tighter">Colors</p>
+                                <p class="text-xs text-green-400/80">Crimson, Navy, Charcoal, Tan, Silver.</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black text-green-700 uppercase mb-2 tracking-tighter">Materials</p>
+                                <p class="text-xs text-green-400/80">Leather, Nylon, Polyester, Metal, Plastic.</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black text-green-600 uppercase mb-2 tracking-tighter">Sizes</p>
+                                <p class="text-xs text-green-400/80">Tiny, Large, Medium-Sized, Heavy.</p>
+                            </div>
+                            <div id="grammar-tip" class="hidden">
+                                <p class="text-[10px] font-black text-blue-500 uppercase mb-2 tracking-tighter">Grammar Tips</p>
+                                <p class="text-[10px] italic text-blue-400">"Until" / "As soon as"</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <button onclick="submitReport()" id="submit-btn" class="w-full bg-green-600 text-black py-5 font-black hover:bg-green-400 rounded-xl text-xl uppercase transition-all active:scale-95">
-                    Generate Case Report
-                </button>
             </div>
 
             <!-- BACKUP LINKS -->
             <div class="pt-6 border-t border-green-900/30 flex justify-center gap-8 text-[10px] uppercase font-bold text-green-900">
-                <a href="claim_basic.mp3" target="_blank">Basic Audio</a>
-                <a href="claim_intermediate.mp3" target="_blank">Intermediate Audio</a>
-                <a href="claim_advanced.mp3" target="_blank">Advanced Audio</a>
+                <a href="../claim_basic.mp3" target="_blank" class="hover:text-green-400">Audio 1 (Basic)</a>
+                <a href="../claim_intermediate.mp3" target="_blank" class="hover:text-green-400">Audio 2 (Int)</a>
+                <a href="../claim_advanced.mp3" target="_blank" class="hover:text-green-400">Audio 3 (Adv)</a>
             </div>
         </div>
 
         <!-- RESULTS / PRINT PREVIEW -->
         <div id="result-screen" class="hidden mt-8 border-t-4 border-green-900 pt-8 animate-in slide-in-from-bottom-10 duration-700">
-            <h2 class="text-2xl font-black uppercase mb-6 glow">Official Claim Report: #<span id="case-id"></span></h2>
+            <h2 class="text-2xl font-black uppercase mb-6 glow">Security Affidavit: #<span id="case-id"></span></h2>
             <div id="report-text" class="bg-black p-8 border-2 border-green-500 text-green-400 text-lg leading-relaxed whitespace-pre-wrap rounded-2xl min-h-[250px] shadow-inner font-mono"></div>
             
             <div class="mt-10 flex gap-4 no-print pb-10">
@@ -173,8 +200,7 @@
 
         <!-- FOOTER -->
         <footer class="mt-12 pt-6 border-t border-green-950 text-[10px] text-green-900 flex justify-between font-bold uppercase tracking-widest no-print">
-            <span>Class 222A Security Terminal</span>
-            <span>Offline Support Active</span>
+            <span>OFFLINE_MODE_ACTIVE</span>
             <span>Harris Adult Education</span>
         </footer>
     </div>
@@ -191,7 +217,8 @@
             document.getElementById('main-screen').classList.remove('hidden');
             
             if(level === 'advanced' || level === 'intermediate') {
-                document.getElementById('advanced-only').classList.remove('hidden');
+                document.getElementById('advanced-fields').classList.remove('hidden');
+                document.getElementById('grammar-tip').classList.remove('hidden');
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -200,40 +227,31 @@
             const level = document.getElementById('student-level').value;
             const player = document.getElementById('audio-player');
             player.src = "claim_" + level + ".mp3";
-            player.play().catch(() => alert("Audio failed. Use backup links below."));
+            player.play().catch(() => alert("Audio failed. Use backup links at bottom."));
         }
 
         function generateLocalReport(name, level, desc, time, report) {
             const cid = Math.floor(Math.random() * 8999) + 1000;
+            let body = `OFFICIAL SECURITY AFFIDAVIT\n`;
+            body += `CASE: 222A-${cid} | DATE: 04/17/2026\n`;
+            body += `--------------------------------------------------\n`;
+            body += `OFFICER: ${name}\nGROUP: ${level.toUpperCase()}\n\n`;
+            body += `EVIDENCE DESCRIPTION:\n${desc}\n\n`;
             
-            // BUILD THE REPORT DYNAMICALLY BASED ON LEVEL
-            let reportBody = `OFFICIAL SECURITY AFFIDAVIT\n`;
-            reportBody += `CASE NUMBER: 222A-${cid}\n`;
-            reportBody += `DATE: April 17, 2026\n`;
-            reportBody += `--------------------------------------------------\n`;
-            reportBody += `REPORTING OFFICER: ${name}\n`;
-            reportBody += `OFFICER LEVEL: ${level.toUpperCase()}\n\n`;
-            reportBody += `EVIDENCE DESCRIPTION:\n${desc}\n\n`;
-            
-            // ONLY SHOW STORY/REPORTED SPEECH FOR HIGHER LEVELS
             if (level === 'advanced' || level === 'intermediate') {
-                if (time) {
-                    reportBody += `TIMELINE / TIME CLAUSE:\n${time}\n\n`;
-                }
-                if (report) {
-                    reportBody += `REPORTED TRAVELER STATEMENT:\n${report}\n\n`;
-                }
+                if (time) body += `TIMELINE / PLAN:\n${time}\n\n`;
+                if (report) body += `TRAVELER STATEMENT:\n${report}\n\n`;
             }
             
-            reportBody += `--------------------------------------------------\n`;
-            reportBody += `VERDICT: Claim filed. Please print and place in folder.\n`;
-            reportBody += `OFFICIAL SIGNATURE: ______________________________`;
+            body += `--------------------------------------------------\n`;
+            body += `VERDICT: Claim filed for investigation.\n`;
+            body += `OFFICIAL SIGNATURE: ______________________________`;
             
             document.getElementById('case-id').innerText = cid;
-            document.getElementById('report-text').innerText = reportBody;
+            document.getElementById('report-text').innerText = body;
             document.getElementById('result-screen').classList.remove('hidden');
             document.getElementById('submit-btn').disabled = false;
-            document.getElementById('submit-btn').innerHTML = 'Generate Case Report';
+            document.getElementById('submit-btn').innerHTML = 'SUBMIT OFFICIAL REPORT';
             document.getElementById('result-screen').scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -245,12 +263,10 @@
             const report = document.getElementById('reported-speech').value;
             const btn = document.getElementById('submit-btn');
 
-            if(!desc) { alert("Please type a description."); return; }
-
+            if(!desc) { alert("Please type your description."); return; }
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing File...';
+            btn.innerHTML = 'FILING REPORT...';
 
-            // GITHUB / OFFLINE BACKUP (ALWAYS WORKS)
             if (apiKey === "" && !window.location.hostname.includes('artifact')) {
                 setTimeout(() => generateLocalReport(name, level, desc, time, report), 1000);
                 return;
@@ -262,35 +278,29 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         contents: [{ parts: [{ text: `Officer: ${name}. Level: ${level}. Description: ${desc}. Time: ${time}. Speech: ${report}` }] }],
-                        systemInstruction: { parts: [{ text: "Write a professional airport security report for an ESL student. No emojis. Clean text." }] }
+                        systemInstruction: { parts: [{ text: "Write a professional airport security report for an ESL student. No emojis. Professional tone." }] }
                     })
                 });
-                
                 if (!response.ok) throw new Error();
                 const result = await response.json();
-                const aiText = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                
-                document.getElementById('report-text').innerText = aiText;
-                document.getElementById('case-id').innerText = Math.floor(Math.random() * 8999) + 1000;
+                document.getElementById('report-text').innerText = result.candidates?.[0]?.content?.parts?.[0]?.text;
                 document.getElementById('result-screen').classList.remove('hidden');
                 btn.disabled = false;
-                btn.innerHTML = 'Generate Case Report';
-                document.getElementById('result-screen').scrollIntoView({ behavior: 'smooth' });
-
+                btn.innerHTML = 'SUBMIT OFFICIAL REPORT';
             } catch (e) {
                 generateLocalReport(name, level, desc, time, report);
             }
         }
 
-        // AUTO-LEVELING
         document.getElementById('student-name').addEventListener('change', function() {
             const val = this.value;
             const l1_2 = ["B., Adeline", "B., Rose", "F., MacDonald", "S., Frisia", "C., Paola", "H., Maria", "K., Aminata"];
             const l3 = ["C., Vivian", "C., Debora", "C., Domingo", "M., Estefania"];
             const l4_5 = ["E., Marie", "J., Jeyoung", "K., Mijung", "O., Priscilla", "P., Enderson"];
-            if (l1_2.includes(val)) document.getElementById('student-level').value = "basic";
-            else if (l3.includes(val)) document.getElementById('student-level').value = "intermediate";
-            else if (l4_5.includes(val)) document.getElementById('student-level').value = "advanced";
+            const target = document.getElementById('student-level');
+            if (l1_2.includes(val)) target.value = "basic";
+            else if (l3.includes(val)) target.value = "intermediate";
+            else if (l4_5.includes(val)) target.value = "advanced";
         });
     </script>
 </body>
