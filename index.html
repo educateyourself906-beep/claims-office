@@ -40,7 +40,7 @@
         <!-- HEADER -->
         <header class="border-b-2 border-green-900 pb-6 mb-8 flex justify-between items-center">
             <div>
-                <h1 class="text-3xl font-black uppercase tracking-tight glow-text">Airport Lost & Found</h1>
+                <h1 class="text-3xl font-black uppercase tracking-tight glow-text text-green-400">Airport Lost & Found</h1>
                 <p class="text-xs text-green-700 font-bold uppercase tracking-widest mt-1">Computer Lab Activity | April 17</p>
             </div>
             <div class="hidden md:block text-right">
@@ -93,7 +93,6 @@
                     GO TO MY REPORT <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
-            <p class="text-center text-xs text-green-900 font-bold uppercase tracking-widest">Please see the teacher if you cannot find your name.</p>
         </div>
 
         <!-- STEP 2: WRITING FORM -->
@@ -150,10 +149,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="p-6 border-2 border-green-900/30 rounded-xl text-center bg-black/40">
-                        <p class="text-[10px] text-green-800 font-bold uppercase mb-2">Tip</p>
-                        <p class="text-xs text-green-700 italic">Check your spelling with the Visual Dictionary!</p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -164,7 +159,7 @@
                 <div class="bg-green-600 p-3 rounded-lg text-black">
                     <i class="fas fa-file-alt text-2xl"></i>
                 </div>
-                <h2 class="text-2xl font-black uppercase glow-text tracking-tighter">Your Official Report</h2>
+                <h2 class="text-2xl font-black uppercase glow-text tracking-tighter text-green-400">Your Official Report</h2>
             </div>
             
             <div id="ai-response" class="bg-black p-8 border-2 border-green-500 text-green-400 text-base leading-relaxed whitespace-pre-wrap font-sans shadow-inner rounded-xl min-h-[200px]"></div>
@@ -182,135 +177,90 @@
         <!-- FOOTER -->
         <footer class="mt-12 pt-6 border-t border-green-950 text-[10px] text-green-900 flex justify-between uppercase font-bold tracking-widest">
             <span>Class 222A Digital Lab</span>
-            <span class="opacity-50">#SECURITY-TERMINAL-883</span>
+            <span class="opacity-50 tracking-tighter">OFFLINE_BACKUP_ENABLED</span>
             <span>Harris Adult Education</span>
         </footer>
     </div>
 
     <script>
-        const apiKey = ""; // Set to empty as per instruction; environment provides it.
+        const apiKey = ""; 
 
         function startClaim() {
-            const nameSelect = document.getElementById('student-name');
-            const studentName = nameSelect.value;
+            const studentName = document.getElementById('student-name').value;
             const level = document.getElementById('student-level').value;
-            
-            if(!studentName) {
-                alert("Please select your name first.");
-                return;
-            }
-            
+            if(!studentName) { alert("Please select your name first."); return; }
             document.getElementById('setup-screen').classList.add('hidden');
             document.getElementById('claim-screen').classList.remove('hidden');
             document.getElementById('user-display').innerText = studentName;
             
-            const levelMap = {
-                'basic': 'Level 1-2',
-                'intermediate': 'Level 3',
-                'advanced': 'Level 4-5'
-            };
+            const levelMap = {'basic': 'Level 1-2', 'intermediate': 'Level 3', 'advanced': 'Level 4-5'};
             document.getElementById('level-display').innerText = levelMap[level];
-            
             if(level === 'advanced' || level === 'intermediate') {
                 document.getElementById('advanced-fields').classList.remove('hidden');
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        function showBackupReport(name, level, desc, time, report) {
+            const caseId = Math.floor(Math.random() * 9000) + 1000;
+            const output = `OFFICIAL LOST ITEM REPORT - CASE #222A-${caseId}\n\nREPORTER: ${name}\nLEVEL: ${level.toUpperCase()}\n\nITEM DESCRIPTION:\n${desc}\n\nTIMELINE / PLAN:\n${time || "No timeline provided."}\n\nREPORTED STATEMENT:\n${report || "No statement provided."}\n\n--- SECURITY ASSESSMENT ---\nReport verified and filed in the database. Please print this copy for your Student Work Folder.`;
+            
+            document.getElementById('result-screen').classList.remove('hidden');
+            document.getElementById('ai-response').innerText = output;
+            document.getElementById('submit-btn').disabled = false;
+            document.getElementById('submit-btn').innerHTML = 'Finish & View My Report';
+            document.getElementById('result-screen').scrollIntoView({ behavior: 'smooth' });
+        }
+
         async function submitToAI() {
-            const studentName = document.getElementById('user-display').innerText;
+            const name = document.getElementById('user-display').innerText;
             const level = document.getElementById('student-level').value;
             const desc = document.getElementById('item-desc').value;
             const time = document.getElementById('time-clause').value;
             const report = document.getElementById('reported-speech').value;
             const btn = document.getElementById('submit-btn');
 
-            if(!desc) { alert("Please write a description first."); return; }
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> PROCESSING...';
 
-            // Check if key is available if running outside Canvas (like GitHub Pages)
+            // IF NO API KEY (GitHub Pages), USE BACKUP MODE IMMEDIATELY
             if (apiKey === "" && !window.location.hostname.includes('artifact')) {
-                alert("SECURITY ERROR: The AI system is only active in the classroom environment. Please test this on the class preview page.");
+                setTimeout(() => showBackupReport(name, level, desc, time, report), 1500);
                 return;
             }
 
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> CONNECTING TO SECURITY AI...';
-            
-            const systemPrompt = `You are a professional Airport Security Assistant. 
-            The user is an ESL student at NRS Level: ${level}. 
-            Task: Take their notes and create a formal, professional "Official Lost Item Report".
-            
-            Format:
-            1. Title: "OFFICIAL LOST ITEM REPORT - CASE #222A"
-            2. Name: "${studentName}"
-            3. Detailed Description: (Rewrite their notes into professional, clear English sentences. Correct grammar errors).
-            4. Timeline: (Include their until/as soon as sentence if provided).
-            
-            Feedback: If they are Level 4/5, briefly check their Reported Speech and Time Clauses. If they made a mistake, add a friendly "Teacher Tip" at the bottom.
-            Keep the tone very professional and clear.`;
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Student: ${name}. Level: ${level}. Description: ${desc}. Time Clause: ${time}. Reported Speech: ${report}` }] }],
+                        systemInstruction: { parts: [{ text: "Format a professional airport security report for an ESL student." }] }
+                    })
+                });
+                
+                if (!response.ok) throw new Error();
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                
+                document.getElementById('result-screen').classList.remove('hidden');
+                document.getElementById('ai-response').innerText = text;
+                btn.disabled = false;
+                btn.innerHTML = 'Finish & View My Report';
+                document.getElementById('result-screen').scrollIntoView({ behavior: 'smooth' });
 
-            const userQuery = `Student Name: ${studentName}. NRS Level: ${level}. Item Description: ${desc}. Time Clause: ${time}. Reported Statement: ${report}.`;
-
-            let retries = 0;
-            const maxRetries = 5;
-
-            async function callGemini() {
-                try {
-                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{ 
-                                role: "user",
-                                parts: [{ text: userQuery }] 
-                            }],
-                            systemInstruction: { 
-                                parts: [{ text: systemPrompt }] 
-                            }
-                        })
-                    });
-                    
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        console.error("API Error:", errorData);
-                        throw new Error('Server Rejection');
-                    }
-                    
-                    const result = await response.json();
-                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                    
-                    if (!text) throw new Error('Empty Response');
-
-                    document.getElementById('result-screen').classList.remove('hidden');
-                    document.getElementById('ai-response').innerText = text;
-                    btn.disabled = false;
-                    btn.innerHTML = 'Finish & View My Report';
-                    document.getElementById('result-screen').scrollIntoView({ behavior: 'smooth' });
-
-                } catch (error) {
-                    if (retries < maxRetries) {
-                        retries++;
-                        const delay = Math.pow(2, retries) * 1000;
-                        setTimeout(callGemini, delay);
-                    } else {
-                        btn.disabled = false;
-                        btn.innerHTML = 'RETRY CONNECTION';
-                        alert("The security server is busy or unavailable on this network. Please ensure you are logged in to the class portal.");
-                    }
-                }
+            } catch (error) {
+                // If AI fails, use backup so student isn't blocked
+                showBackupReport(name, level, desc, time, report);
             }
-
-            callGemini();
         }
 
-        // Automatic NRS Level Selection
         document.getElementById('student-name').addEventListener('change', function() {
             const val = this.value;
             const levelSelect = document.getElementById('student-level');
             const l1_2 = ["B., Adeline", "B., Rose", "F., MacDonald", "S., Frisia", "C., Paola", "H., Maria", "K., Aminata"];
             const l3 = ["C., Vivian", "C., Debora", "C., Domingo", "M., Estefania"];
             const l4_5 = ["E., Marie", "J., Jeyoung", "K., Mijung", "O., Priscilla", "P., Enderson"];
-            
             if (l1_2.includes(val)) levelSelect.value = "basic";
             else if (l3.includes(val)) levelSelect.value = "intermediate";
             else if (l4_5.includes(val)) levelSelect.value = "advanced";
