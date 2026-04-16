@@ -10,7 +10,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; letter-spacing: 0.01em; }
         
-        /* Keep the cool look, but make it easier to read */
         .crt-bg {
             background: linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
         }
@@ -24,14 +23,21 @@
         }
         select option { background-color: #000; color: #4ade80; }
         .glow-text { text-shadow: 0 0 8px rgba(74, 222, 128, 0.5); }
+        
+        @keyframes pulse-border {
+            0% { border-color: rgba(22, 101, 52, 1); }
+            50% { border-color: rgba(74, 222, 128, 0.5); }
+            100% { border-color: rgba(22, 101, 52, 1); }
+        }
+        .active-border { animation: pulse-border 2s infinite; }
     </style>
 </head>
 <body class="crt-bg text-green-400 min-h-screen p-4 md:p-10">
     <div class="crt-overlay"></div>
 
-    <div class="max-w-4xl mx-auto border-2 border-green-900 p-6 md:p-8 bg-black shadow-2xl relative">
+    <div class="max-w-4xl mx-auto border-2 border-green-900 p-6 md:p-8 bg-black shadow-2xl relative rounded-lg overflow-hidden">
         
-        <!-- HEADER: SIMPLIFIED -->
+        <!-- HEADER -->
         <header class="border-b-2 border-green-900 pb-6 mb-8 flex justify-between items-center">
             <div>
                 <h1 class="text-3xl font-black uppercase tracking-tight glow-text">Airport Lost & Found</h1>
@@ -42,18 +48,18 @@
             </div>
         </header>
 
-        <!-- STEP 1: LOGIN (SIMPLE WORDS) -->
+        <!-- STEP 1: LOGIN -->
         <div id="setup-screen" class="space-y-8 py-4">
-            <div class="bg-green-950/20 p-8 border border-green-900 rounded-xl">
+            <div class="bg-green-950/20 p-8 border border-green-900 rounded-xl active-border">
                 <h2 class="text-xl font-bold mb-6 flex items-center gap-3">
-                    <span class="bg-green-900 text-black w-8 h-8 rounded-full flex items-center justify-center text-sm">1</span>
+                    <span class="bg-green-900 text-black w-8 h-8 rounded-full flex items-center justify-center text-sm font-black">1</span>
                     START YOUR REPORT
                 </h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <label class="block text-xs font-black text-green-700 mb-2 uppercase">Your Name</label>
-                        <select id="student-name" class="w-full bg-black border-2 border-green-900 p-4 text-green-400 outline-none focus:border-green-400 appearance-none cursor-pointer rounded-lg text-lg">
+                        <label class="block text-xs font-black text-green-700 mb-2 uppercase tracking-tighter">Your Name</label>
+                        <select id="student-name" class="w-full bg-black border-2 border-green-900 p-4 text-green-400 outline-none focus:border-green-400 appearance-none cursor-pointer rounded-lg text-lg transition-colors">
                             <option value="">-- Click to find your name --</option>
                             <option value="B., Adeline">B., Adeline</option>
                             <option value="B., Rose">B., Rose</option>
@@ -74,8 +80,8 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-black text-green-700 mb-2 uppercase">Your Level</label>
-                        <select id="student-level" class="w-full bg-black border-2 border-green-900 p-4 text-green-400 outline-none focus:border-green-400 cursor-pointer rounded-lg text-lg">
+                        <label class="block text-xs font-black text-green-700 mb-2 uppercase tracking-tighter">Your Level</label>
+                        <select id="student-level" class="w-full bg-black border-2 border-green-900 p-4 text-green-400 outline-none focus:border-green-400 cursor-pointer rounded-lg text-lg transition-colors">
                             <option value="basic">Level 1 or 2</option>
                             <option value="intermediate">Level 3</option>
                             <option value="advanced">Level 4 or 5</option>
@@ -83,90 +89,91 @@
                     </div>
                 </div>
                 
-                <button onclick="startClaim()" class="mt-10 bg-green-500 text-black px-8 py-5 font-black hover:bg-green-300 transition-all w-full flex items-center justify-center gap-3 text-xl rounded-lg shadow-lg">
+                <button onclick="startClaim()" class="mt-10 bg-green-500 text-black px-8 py-5 font-black hover:bg-green-300 transition-all w-full flex items-center justify-center gap-3 text-xl rounded-lg shadow-lg uppercase">
                     GO TO MY REPORT <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
-            <p class="text-center text-xs text-green-900">Please see the teacher if you cannot find your name.</p>
+            <p class="text-center text-xs text-green-900 font-bold uppercase tracking-widest">Please see the teacher if you cannot find your name.</p>
         </div>
 
-        <!-- STEP 2: WRITING FORM (CLEAR LABELS) -->
+        <!-- STEP 2: WRITING FORM -->
         <div id="claim-screen" class="hidden space-y-8 animate-in fade-in duration-500">
-            <div class="flex items-center justify-between bg-green-950/40 p-3 rounded border border-green-900">
-                <span class="text-sm font-bold">WRITING AS: <span id="user-display" class="text-white ml-2"></span></span>
-                <span class="text-[10px] bg-green-900 text-black px-2 py-1 rounded font-black" id="level-display"></span>
+            <div class="flex items-center justify-between bg-green-950/40 p-4 rounded-lg border border-green-900">
+                <span class="text-sm font-bold tracking-tight">WRITING AS: <span id="user-display" class="text-white ml-2 glow-text"></span></span>
+                <span class="text-[10px] bg-green-900 text-black px-3 py-1 rounded-md font-black uppercase" id="level-display"></span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- MAIN FORM -->
                 <div class="md:col-span-2 space-y-8">
                     <div>
-                        <label class="block text-sm font-bold mb-3 text-green-500">
+                        <label class="block text-sm font-bold mb-3 text-green-500 uppercase tracking-wide">
                             1. Describe the missing item
                         </label>
-                        <p class="text-xs text-green-800 mb-2 italic">Tell the computer: What color? What material? How many?</p>
-                        <textarea id="item-desc" rows="5" placeholder="Example: I lost a large, red, leather bag. It has two silver zippers..." class="w-full bg-black border-2 border-green-900 p-4 text-green-400 outline-none focus:border-green-400 placeholder:text-green-900 rounded-lg text-lg"></textarea>
+                        <p class="text-xs text-green-800 mb-3 italic">Example: I lost a large, red, leather bag. It has two silver zippers.</p>
+                        <textarea id="item-desc" rows="5" placeholder="Type your description here..." class="w-full bg-black border-2 border-green-900 p-4 text-green-400 outline-none focus:border-green-400 placeholder:text-green-900 rounded-lg text-lg font-medium"></textarea>
                     </div>
 
-                    <!-- ADVANCED/INTERMEDIATE ONLY -->
-                    <div id="advanced-fields" class="hidden space-y-8 border-t border-green-900 pt-8">
+                    <div id="advanced-fields" class="hidden space-y-8 border-t-2 border-green-900 pt-8">
                         <div>
-                            <label class="block text-sm font-bold mb-3 text-green-500">
+                            <label class="block text-sm font-bold mb-3 text-green-500 uppercase tracking-wide">
                                 2. When will you wait? (Time Clauses)
                             </label>
-                            <p class="text-xs text-green-800 mb-2 italic">Use 'until' or 'as soon as'.</p>
-                            <input type="text" id="time-clause" placeholder="Example: I will wait at the gate until the agent finds it." class="w-full bg-black border-2 border-green-900 p-4 text-green-400 outline-none focus:border-green-400 rounded-lg">
+                            <p class="text-xs text-green-800 mb-3 italic">Use 'until' or 'as soon as'.</p>
+                            <input type="text" id="time-clause" placeholder="Example: I will wait until the agent finds it." class="w-full bg-black border-2 border-green-900 p-4 text-green-400 outline-none focus:border-green-400 rounded-lg text-lg">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold mb-3 text-green-500">
+                            <label class="block text-sm font-bold mb-3 text-green-500 uppercase tracking-wide">
                                 3. What did the traveler say? (Reported Speech)
                             </label>
-                            <p class="text-xs text-green-800 mb-2 italic">Example: The traveler said she had lost her bag.</p>
-                            <input type="text" id="reported-speech" placeholder="The traveler said that..." class="w-full bg-black border-2 border-green-900 p-4 text-green-400 outline-none focus:border-green-400 rounded-lg">
+                            <p class="text-xs text-green-800 mb-3 italic">Example: The traveler said she had lost her bag.</p>
+                            <input type="text" id="reported-speech" placeholder="The traveler said that..." class="w-full bg-black border-2 border-green-900 p-4 text-green-400 outline-none focus:border-green-400 rounded-lg text-lg">
                         </div>
                     </div>
 
-                    <button onclick="submitToAI()" id="submit-btn" class="w-full bg-green-600 text-black py-5 font-black hover:bg-green-400 shadow-xl text-xl rounded-lg uppercase tracking-tight">
+                    <button onclick="submitToAI()" id="submit-btn" class="w-full bg-green-600 text-black py-5 font-black hover:bg-green-400 shadow-xl text-xl rounded-lg uppercase tracking-tight transition-all active:scale-95">
                         Finish & View My Report
                     </button>
                 </div>
 
-                <!-- SIDEBAR TOOLS (SIMPLIFIED) -->
+                <!-- SIDEBAR TOOLS -->
                 <div class="space-y-6">
-                    <div class="bg-green-950/20 border-2 border-green-900 p-5 rounded-xl">
-                        <h3 class="text-xs font-black border-b border-green-900 mb-4 pb-2 text-green-500 uppercase">Need Help?</h3>
-                        <div class="space-y-5">
+                    <div class="bg-green-950/20 border-2 border-green-900 p-6 rounded-xl">
+                        <h3 class="text-xs font-black border-b-2 border-green-900 mb-4 pb-2 text-green-500 uppercase tracking-widest">Need Help?</h3>
+                        <div class="space-y-6">
                             <div>
-                                <p class="text-[10px] font-black text-green-700 uppercase mb-1">Materials</p>
-                                <p class="text-xs">Leather, Nylon, Plastic, Metal, Fabric.</p>
+                                <p class="text-[10px] font-black text-green-700 uppercase mb-2 tracking-tighter">Materials</p>
+                                <p class="text-sm leading-relaxed text-green-400/80">Leather, Nylon, Plastic, Metal, Fabric, Polyester.</p>
                             </div>
                             <div>
-                                <p class="text-[10px] font-black text-green-700 uppercase mb-1">Adjectives</p>
-                                <p class="text-xs">Strange, Heavy, Large, Tiny, Floral, Striped.</p>
+                                <p class="text-[10px] font-black text-green-700 uppercase mb-2 tracking-tighter">Adjectives</p>
+                                <p class="text-sm leading-relaxed text-green-400/80">Strange, Heavy, Large, Tiny, Floral, Striped, Crimson.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="p-4 border border-green-900/30 rounded text-center">
-                        <p class="text-[10px] text-green-800 italic">Check your spelling with the Visual Dictionary!</p>
+                    <div class="p-6 border-2 border-green-900/30 rounded-xl text-center bg-black/40">
+                        <p class="text-[10px] text-green-800 font-bold uppercase mb-2">Tip</p>
+                        <p class="text-xs text-green-700 italic">Check your spelling with the Visual Dictionary!</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- RESULT SCREEN (CLEANER) -->
-        <div id="result-screen" class="hidden mt-8 border-t-4 border-green-900 pt-8 animate-in slide-in-from-bottom-10 duration-700">
+        <!-- RESULT SCREEN -->
+        <div id="result-screen" class="hidden mt-8 border-t-4 border-green-900 pt-8 animate-in slide-in-from-bottom-10 duration-700 pb-10">
             <div class="flex items-center gap-4 mb-6">
-                <i class="fas fa-file-alt text-4xl text-green-500"></i>
-                <h2 class="text-2xl font-black uppercase glow-text">Your Official Report</h2>
+                <div class="bg-green-600 p-3 rounded-lg text-black">
+                    <i class="fas fa-file-alt text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-black uppercase glow-text tracking-tighter">Your Official Report</h2>
             </div>
             
-            <div id="ai-response" class="bg-black p-8 border-2 border-green-500 text-green-400 text-base leading-relaxed whitespace-pre-wrap font-sans shadow-inner rounded-xl"></div>
+            <div id="ai-response" class="bg-black p-8 border-2 border-green-500 text-green-400 text-base leading-relaxed whitespace-pre-wrap font-sans shadow-inner rounded-xl min-h-[200px]"></div>
             
             <div class="mt-10 flex flex-col md:flex-row gap-4 no-print">
-                <button onclick="window.print()" class="bg-green-500 text-black px-10 py-4 font-black hover:bg-green-300 flex items-center justify-center gap-3 rounded-lg flex-1">
+                <button onclick="window.print()" class="bg-green-500 text-black px-10 py-4 font-black hover:bg-green-300 flex items-center justify-center gap-3 rounded-lg flex-1 transition-all">
                     <i class="fas fa-print"></i> PRINT FOR YOUR FOLDER
                 </button>
-                <button onclick="location.reload()" class="border-2 border-green-900 px-10 py-4 font-black hover:bg-green-950 text-green-800 rounded-lg">
+                <button onclick="location.reload()" class="border-2 border-green-900 px-10 py-4 font-black hover:bg-green-950 text-green-800 rounded-lg transition-all">
                     START AGAIN
                 </button>
             </div>
@@ -175,12 +182,13 @@
         <!-- FOOTER -->
         <footer class="mt-12 pt-6 border-t border-green-950 text-[10px] text-green-900 flex justify-between uppercase font-bold tracking-widest">
             <span>Class 222A Digital Lab</span>
+            <span class="opacity-50">#SECURITY-TERMINAL-883</span>
             <span>Harris Adult Education</span>
         </footer>
     </div>
 
     <script>
-        const apiKey = ""; // Environment handles key
+        const apiKey = ""; // Set to empty as per instruction; environment provides it.
 
         function startClaim() {
             const nameSelect = document.getElementById('student-name');
@@ -206,7 +214,7 @@
             if(level === 'advanced' || level === 'intermediate') {
                 document.getElementById('advanced-fields').classList.remove('hidden');
             }
-            window.scrollTo(0,0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         async function submitToAI() {
@@ -219,23 +227,29 @@
 
             if(!desc) { alert("Please write a description first."); return; }
 
+            // Check if key is available if running outside Canvas (like GitHub Pages)
+            if (apiKey === "" && !window.location.hostname.includes('artifact')) {
+                alert("SECURITY ERROR: The AI system is only active in the classroom environment. Please test this on the class preview page.");
+                return;
+            }
+
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> CREATING REPORT...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> CONNECTING TO SECURITY AI...';
             
-            const systemPrompt = `You are an Airport Security Assistant. 
+            const systemPrompt = `You are a professional Airport Security Assistant. 
             The user is an ESL student at NRS Level: ${level}. 
-            Task: Take their notes and make a formal "Official Report".
+            Task: Take their notes and create a formal, professional "Official Lost Item Report".
             
             Format:
-            1. Title: "OFFICIAL LOST ITEM REPORT"
+            1. Title: "OFFICIAL LOST ITEM REPORT - CASE #222A"
             2. Name: "${studentName}"
-            3. Detailed Description: (Rewrite their notes into professional, clear English sentences).
+            3. Detailed Description: (Rewrite their notes into professional, clear English sentences. Correct grammar errors).
             4. Timeline: (Include their until/as soon as sentence if provided).
             
-            Feedback: If they are Level 4/5, briefly check their Reported Speech and Time Clauses. If they made a mistake, add a "Teacher Tip" at the bottom to help them learn.
-            Keep the tone professional and very clear for a student to read.`;
+            Feedback: If they are Level 4/5, briefly check their Reported Speech and Time Clauses. If they made a mistake, add a friendly "Teacher Tip" at the bottom.
+            Keep the tone very professional and clear.`;
 
-            const userQuery = `Student: ${studentName}. Item Notes: ${desc}. Time Clause: ${time}. Statement: ${report}.`;
+            const userQuery = `Student Name: ${studentName}. NRS Level: ${level}. Item Description: ${desc}. Time Clause: ${time}. Reported Statement: ${report}.`;
 
             let retries = 0;
             const maxRetries = 5;
@@ -246,15 +260,27 @@
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            contents: [{ parts: [{ text: userQuery }] }],
-                            systemInstruction: { parts: [{ text: systemPrompt }] }
+                            contents: [{ 
+                                role: "user",
+                                parts: [{ text: userQuery }] 
+                            }],
+                            systemInstruction: { 
+                                parts: [{ text: systemPrompt }] 
+                            }
                         })
                     });
                     
-                    if (!response.ok) throw new Error('API Error');
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error("API Error:", errorData);
+                        throw new Error('Server Rejection');
+                    }
+                    
                     const result = await response.json();
                     const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
                     
+                    if (!text) throw new Error('Empty Response');
+
                     document.getElementById('result-screen').classList.remove('hidden');
                     document.getElementById('ai-response').innerText = text;
                     btn.disabled = false;
@@ -268,8 +294,8 @@
                         setTimeout(callGemini, delay);
                     } else {
                         btn.disabled = false;
-                        btn.innerHTML = 'RETRY';
-                        alert("The server is busy. Please try again.");
+                        btn.innerHTML = 'RETRY CONNECTION';
+                        alert("The security server is busy or unavailable on this network. Please ensure you are logged in to the class portal.");
                     }
                 }
             }
